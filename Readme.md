@@ -98,6 +98,6 @@ The workflow will: <br>
 
 📎 Upload test reports as downloadable artifacts <br>
 
-🔄 Automatically start the mock KYC app if BASE_URL is not defined <br>
+🔄 Automatically start the  app if BASE_URL is not defined <br>
 
 ✅ This makes it easier to test the full flow even without a running backend.
