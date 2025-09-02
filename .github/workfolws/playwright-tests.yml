@@ -1,0 +1,70 @@
+name: Playwright Tests
+
+on:
+  push:
+    paths:
+      - '**/*.ts'
+      - 'tests/**'
+      - 'pages/**'
+      - 'utils/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'playwright.config.ts'
+  schedule:
+    - cron: '0 2 * * *' # Daily at 2:00 AM UTC
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      BASE_URL: ${{ secrets.BASE_URL || '' }}
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🔧 Setup Node.js (latest LTS)
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+
+      - name: 📦 Install test dependencies
+        run: npm ci
+
+      - name: 📥 Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: 🧠 Conditionally start mock KYC app if BASE_URL is not set
+        run: |
+          if [ -z "$BASE_URL" ]; then
+            echo "🔧 No BASE_URL found. Starting local mock KYC app..."
+
+            git clone https://github.com/vialeteu/kyc-mock-app.git kyc-app
+
+            cd kyc-app/server
+            npm install
+            nohup npm start > server.log 2>&1 &
+
+            cd ../client
+            npm install
+            nohup npm start > client.log 2>&1 &
+
+            echo "BASE_URL=http://localhost:3000" >> $GITHUB_ENV
+          else
+            echo "🌐 Using provided BASE_URL: $BASE_URL"
+            echo "BASE_URL=$BASE_URL" >> $GITHUB_ENV
+          fi
+
+      - name: ⏱️ Wait for backend/frontend to be ready
+        run: |
+          echo "⏳ Waiting for app at $BASE_URL and http://localhost:3001..."
+          npx wait-on $BASE_URL http://localhost:3001
+
+      - name: 🧪 Run Playwright tests
+        run: npx playwright test --reporter=list,html
+
+      - name: 📊 Upload Playwright HTML Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: playwright-report/
