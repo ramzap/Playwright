@@ -1,6 +1,6 @@
 ✅ Playwright Automation Solution
 
-Welcome to the Playwright automation solution for testing a modern KYC (Know Your Customer) web application.
+Welcome to the Playwright automation solution for testing a digital wallet web app.
 
 📘 Please read this documentation carefully before using the solution.
 
