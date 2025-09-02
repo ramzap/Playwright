@@ -65,7 +65,7 @@ jobs:
         run: npx playwright test --reporter=list,html
 
       - name: 📊 Upload Playwright HTML Report
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report/
