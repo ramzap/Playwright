@@ -8,7 +8,7 @@ Welcome to the Playwright automation solution for testing a modern KYC (Know You
 
 This project follows a clear and maintainable structure using the Page Object Model (POM):
 
-.
+```
 ├── tests/                     # Test specifications
 │   ├── userRegistrationAndKyc.spec.ts
 │   └── assets/               # Test assets (e.g., mock images)
@@ -25,6 +25,7 @@ This project follows a clear and maintainable structure using the Page Object Mo
 ├── .env                      # Environment variables (e.g., BASE_URL)
 ├── README.md                 # This documentation file
 └── package.json              # Node.js project configuration
+```
 
 🧪 Tech Stack
 
