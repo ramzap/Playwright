@@ -35,22 +35,25 @@ jobs:
       - name: 📥 Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: 🧠 Conditionally start mock KYC app if BASE_URL is not set
+      - name: 🧠 Conditionally start mock app if BASE_URL is not set
         run: |
           if [ -z "$BASE_URL" ]; then
             echo "🔧 No BASE_URL found. Starting local mock KYC app..."
-
+      
             git clone https://github.com/vialeteu/kyc-mock-app.git kyc-app
-
+      
             cd kyc-app/server
             npm install
             nohup npm start > server.log 2>&1 &
-
+      
             cd ../client
             npm install
             nohup npm start > client.log 2>&1 &
-
-            echo "BASE_URL=http://localhost:3000" >> $GITHUB_ENV
+      
+            echo "✅ backend and frontend starting..."
+            sleep 15
+      
+            echo "BASE_URL=http://localhost:3001" >> $GITHUB_ENV
           else
             echo "🌐 Using provided BASE_URL: $BASE_URL"
             echo "BASE_URL=$BASE_URL" >> $GITHUB_ENV
