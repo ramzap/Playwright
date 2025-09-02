@@ -58,7 +58,7 @@ npx playwright install
 
 In the root directory:
 
-BASE_URL=http://localhost:3000
+BASE_URL=http://localhost:3001
 
 
 🔁 Update BASE_URL depending on your environment (e.g. local, staging, production).
